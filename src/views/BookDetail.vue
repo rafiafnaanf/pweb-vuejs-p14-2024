@@ -18,6 +18,15 @@
           Book details and information
         </p>
       </div>
+      
+      <div v-if="book.coverImage" class="px-4 py-5 sm:px-6">
+        <img
+          v-bind:src="book.coverImage"
+          alt="Book Cover"
+          class="max-w-full h-auto rounded-md shadow-lg"
+        />
+      </div>
+      
       <div class="border-t border-gray-200">
         <dl>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -26,25 +35,60 @@
               {{ book.author }}
             </dd>
           </div>
+
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Category</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ book.category }}
+              {{ book.tags.join(', ') }}
             </dd>
           </div>
+
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Status</dt>
-            <dd class="mt-1 sm:mt-0 sm:col-span-2">
-              <span
-                :class="[
-                  'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                  book.available
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                ]"
-              >
-                {{ book.available ? 'Available' : 'Borrowed' }}
-              </span>
+            <dt class="text-sm font-medium text-gray-500">Published Date</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ new Date(book.publishedDate).toLocaleDateString() }}
+            </dd>
+          </div>
+
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Publisher</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.publisher }}
+            </dd>
+          </div>
+
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Description</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.description }}
+            </dd>
+          </div>
+
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Average Rating</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.rating.average }}
+            </dd>
+          </div>
+
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Rating Count</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.rating.count }}
+            </dd>
+          </div>
+
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Initial Quantity</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.initialQty }}
+            </dd>
+          </div>
+
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Quantity</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {{ book.qty }}
             </dd>
           </div>
         </dl>
@@ -72,18 +116,29 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 
 const fetchBook = async () => {
-  const id = route.params.id as string
-  loading.value = true
-  error.value = null
+  const id = route.params.id as string;
   
+  // Log the id to check if it's being passed correctly
+  console.log('Fetched ID from route:', id);
+
+  if (!id) {
+    error.value = 'Book ID is missing';
+    return;
+  }
+
+  loading.value = true;
+  error.value = null;
+
   try {
-    const response = await fetch(`http://localhost:4000/book/${id}`)
-    if (!response.ok) throw new Error('Failed to fetch book details')
-    book.value = await response.json()
+    const response = await fetch(`http://localhost:4000/book/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch book details');
+    const data = await response.json();
+    console.log('Received data:', data);  // Log the API response
+    book.value = data.data;  // Ensure you're accessing the 'data' field in the response
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'An error occurred'
+    error.value = err instanceof Error ? err.message : 'An error occurred';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 

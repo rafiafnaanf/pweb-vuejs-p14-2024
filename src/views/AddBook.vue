@@ -36,22 +36,119 @@
         <input
           type="text"
           id="category"
-          v-model="form.category"
+          v-model="form.tags"
           required
           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
 
-      <div class="flex items-center">
-        <input
-          type="checkbox"
-          id="available"
-          v-model="form.available"
-          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-        />
-        <label for="available" class="ml-2 block text-sm text-gray-900">
-          Available for borrowing
+      <div>
+        <label for="coverImage" class="block text-sm font-medium text-gray-700">
+          Cover Image (Optional)
         </label>
+        <input
+          type="text"
+          id="coverImage"
+          v-model="form.coverImage"
+          placeholder="Enter URL (Optional)"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="publishedDate" class="block text-sm font-medium text-gray-700">
+          Published Date
+        </label>
+        <input
+          type="date"
+          id="publishedDate"
+          v-model="form.publishedDate"
+          required
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="publisher" class="block text-sm font-medium text-gray-700">
+          Publisher
+        </label>
+        <input
+          type="text"
+          id="publisher"
+          v-model="form.publisher"
+          required
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">
+          Description
+        </label>
+        <textarea
+          id="description"
+          v-model="form.description"
+          required
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="ratingAverage" class="block text-sm font-medium text-gray-700">
+          Average Rating
+        </label>
+        <input
+          type="number"
+          id="ratingAverage"
+          v-model="form.rating.average"
+          required
+          min="0"
+          max="5"
+          step="0.1"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="ratingCount" class="block text-sm font-medium text-gray-700">
+          Rating Count
+        </label>
+        <input
+          type="number"
+          id="ratingCount"
+          v-model="form.rating.count"
+          required
+          min="0"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="initialQty" class="block text-sm font-medium text-gray-700">
+          Initial Quantity
+        </label>
+        <input
+          type="number"
+          id="initialQty"
+          v-model="form.initialQty"
+          required
+          min="1"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="qty" class="block text-sm font-medium text-gray-700">
+          Quantity
+        </label>
+        <input
+          type="number"
+          id="qty"
+          v-model="form.qty"
+          required
+          min="1"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
       </div>
 
       <div class="flex justify-end space-x-3">
@@ -89,8 +186,17 @@ const error = ref<string | null>(null)
 const form = ref<BookForm>({
   title: '',
   author: '',
-  category: '',
-  available: true
+  tags: [],
+  coverImage: '',  // Make coverImage optional by setting default value as empty string
+  publishedDate: '',
+  publisher: '',
+  description: '',
+  rating: {
+    average: 0,
+    count: 0
+  },
+  initialQty: 1,
+  qty: 1
 })
 
 const handleSubmit = async () => {
