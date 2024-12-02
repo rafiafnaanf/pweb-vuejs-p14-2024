@@ -77,7 +77,7 @@ const fetchBook = async () => {
   error.value = null
   
   try {
-    const response = await fetch(`http://localhost:3000/book/${id}`)
+    const response = await fetch(`http://localhost:4000/book/${id}`)
     if (!response.ok) throw new Error('Failed to fetch book details')
     book.value = await response.json()
   } catch (err) {

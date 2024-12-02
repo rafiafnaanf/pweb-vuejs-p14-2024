@@ -72,7 +72,7 @@ const fetchBooks = async () => {
   error.value = null
   
   try {
-    const response = await fetch('http://localhost:3000/book')
+    const response = await fetch('http://localhost:4000/book')
     if (!response.ok) throw new Error('Failed to fetch books')
     books.value = await response.json()
   } catch (err) {
@@ -89,7 +89,7 @@ const handleDelete = async (id: string) => {
   error.value = null
   
   try {
-    const response = await fetch(`http://localhost:3000/book/${id}`, {
+    const response = await fetch(`http://localhost:4000/book/${id}`, {
       method: 'DELETE'
     })
     if (!response.ok) throw new Error('Failed to delete book')
